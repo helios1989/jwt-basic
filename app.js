@@ -9,12 +9,16 @@ var app = express();
 app.listen(3002, function() {
     console.log('api is listining on port 3002');
 })
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser())
 
 app.use('/api/v1/users', users);
 
+app.get('/api/v1/health-check', function(req, res, next) {
+   res.json({"health":"ok"});
+});
 app.get('/api/protected', ensureToken, function(req, res) {
     jwt.verify(req.token, 'my_secret_key', function(err, data) {
         if (err) {
